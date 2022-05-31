@@ -38,6 +38,10 @@ ans = pf(10);
 
     ```C
     //NetBSD Version
+    #include<sys/c>
+    #include<assert.h>
+    #include<errno.h>
+    #include<stdlib.h>
     void * bsearch(const void *key,
                    const void *base0,
                    size_t nmemb,
