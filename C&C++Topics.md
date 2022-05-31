@@ -28,5 +28,43 @@ ans = pf(10);
 
 
 
+> #### 回调函数
 
+回调函数是函数指针的重要应用。以下是回调函数使用的几个例子：
 
+* C标准库中的二分查找**`bsearch`**函数
+
+    参考源码地址：1. [FreeBSD libc](https://svnweb.freebsd.org/base/head/lib/libc/) 2.[NetBSD libc](http://cvsweb.netbsd.org/bsdweb.cgi/src/lib/libc/?only_with_tag=MAIN) 3.[GNU libc](http://www.gnu.org/software/libc/sources.html)
+
+    ```C
+    //NetBSD Version
+    void * bsearch(const void *key,
+                   const void *base0,
+                   size_t nmemb,
+                   size_t size,
+                   int (*compar)(const void *,const void *))
+    {
+        const char *base = base0;
+        size_t lim;
+        int cmp;
+        const void *p;
+        
+        _DIAGASSERT(key != NULL);
+        _DIAGASSERT(base0 != NULL || nmemb == 0);
+        _DIAGASSERT(compar != NULL);
+        
+        for(lim = nmemb; lim != 0; lim >>= 1){
+            p = base + (lim >> 1) * size;
+            cmp = (*compar)(key,p);
+            if(com == 0)
+                return _UNCONST(p);
+            if(cmp > 0){  /*key > p: move right*/
+                base = (const char *)p + size;
+                lim--;
+            }  /*else move left*/
+        }
+        return (NULL);
+    }
+    ```
+
+    
