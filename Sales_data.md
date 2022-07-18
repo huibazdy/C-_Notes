@@ -61,29 +61,59 @@ int main()
 #include"Sales_item.h"
 int main()
 {
-    Sales_item total;  //保存下一条交易的变量，可以理解为用来遍历的
+    Sales_item total;  //保存某个ISBN的销售数据之和，从第一条销售数据开始
     if(std::cin>>total)
     {
-        Sales_item trans; //保存和的变量
+        Sales_item trans; //临时保存读入的销售记录，读取剩下的所有销售记录
         while(std::cin>>trans)
         {
-            if(total.isbn() == trans.isbn())
+            if(trans.isbn() == total.isbn()) //仍在处理同一本书
                 total += trans;
             else
             {
                 std::cout<<total<<std::endl;
-                total = trans;
+                total = trans;  //total现在表示下一本书（下一个ISBN号）的销售总数据
             }
         }
-        std::cout<<total<<std::endl;
+        std::cout<<total<<std::endl; //打印最后一个ISBN号（最后一本书）的销售数据总和
     }
     else
     {
-        std::cerr<<"No data?!"<<std::endl;
+        std::cerr<<"No data?!"<<std::endl;  //警告用户没有输入
         return -1;
     }
     re	
 }
+```
+
+**Sales_item.h头文件**
+
+```C++
+#ifndef SALESITEM_H
+#define SALESITEM_H
+
+#include"version_test.h"
+
+#include<iostream>
+#include<string>
+
+class Sales_item
+{
+    friend std::istream& operator>>(std::istream&, Sales_item&);
+    friend std::ostream& operator<<(std::ostream&, Slaes_item&);
+    friend bool operator<(const Sales_item&, const Sales_item&);
+    friend bool operator==(const Slaes_item&, const Slaes_item&);
+    
+public:
+#if defined(IN_CLASS_INITS) && defined(DEFAULT_FCNS)
+    Sales_item() = default;
+#else
+    Sales_item():units_sold(0),revenue(0.0){}
+#endif
+    Sales_item(const std::string &book):
+              bookNo(book),units_sold(0),revenue(0.0){}
+    Sales_item(std::istream &is){is >> *this;}
+};
 ```
 
 
@@ -145,3 +175,4 @@ struct Sales_data
 };
 ```
 
+​	
