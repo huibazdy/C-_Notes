@@ -210,11 +210,61 @@ struct Sales_data
 
 > **改进的Sales_data类**
 
+不同于Sales_item类（可以通过其接口来使用其对象，且不能访问其数据成员），Sales_data不是抽象数据类型（它允许用户直接访问其数据成员，并且要求用户来编写操作）。
+
+要想把Sales_data变成抽象数据类型，需要为其定义一些操作供类的用户使用。一旦定义了它自己的操作，就可以实现对数据成员的封装（隐藏）。
+
+我们的目的是使Sales_data支持与Sales_item类相同的操作集合，包括：
+
+* 从对象中获取ISBN号：`isbn()`
+* 输入输出运算符读写对象：`>>`、`<<`
+* 用一个对象给另一个对象赋值：`=`
+* 将两个对象相加生成一个新的对象：`+`
+* 将一个对象加到另一个对象上：`+=`
+
+暂时不考虑自定义运算符（即：运算符重载），考虑以函数形式来实现这些操作：
+
+* 获取ISBN号：`isbn()`
+* 从istream读入数据到Sales_data对象中：`read()`
+* 将Sales_data对象中的值输出到ostream：`print()`
+* 将两个对象相加生成一个新的对象：`add()`
+* 将一个对象加到另一个对象上：`combine()`
+
+
+
+如何使用这些即将被实现的函数？参考书店程序的实现：
+
+```C++
+/*注意：默认该销售信息表格ISBN相同书本销售条目的已经聚合在一起*/
+Sales_data total;              //用来保存求和结果的变量
+if(read(cin,total)){           //读入第一本书
+    Sales_data temp;           //temp变量保存下一条交易数据，用来遍历交易表格
+    while(read(cin,temp)){
+        if(total.isbn() == temp.isbn()){
+            total.combine(temp);
+        } 
+        else{
+            print(cout,total)<<endl;
+            total = temp;      //处理下一本书
+        }    
+    }
+    print(cout,total)<<endl;
+}
+else
+    cerr<<"No data?!"<<endl;   //没有任何输入信息的时候，通知用户
+```
+
+
+
+
+
+
+
+
+
 
 
 【从书店程序开始】
-
-
 
 
 
