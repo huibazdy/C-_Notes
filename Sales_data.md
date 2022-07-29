@@ -257,7 +257,7 @@ else{
 
 
 
-开始改造Sales_data类（开始实现接口或者操作）
+开始改造Sales_data类：
 
 ```C++
 struct Sales_data{
@@ -278,9 +278,37 @@ std::ostream &print(std::ostream&,const Sales_data&);
 
 
 
+定义成员函数：（`isbn()`定义在类内，`combine()`以及`avg_price()`定义在类外）
 
 
 
+【==**引入this**==】
+
+观察isbn函数的实现发现函数体内只有一条return语句，用来返回Sales_data对象的bookNo数据成员。实质上是`total.isbn()`语句隐式地返回**total.bookNo**。
+
+成员函数通过一个名为this的额外隐式参数来访问调用它的那个对象。
+
+当我们调用一个成员函数时，用请求该函数的对象地址初始化this。
+
+在这个例子中，编译器把total的地址传递给了**isbn函数的隐式形参this**，可以等价为编译器将该函数调用重写为：
+
+`Sales_data::isbn(&total)`
+
+调用isbn成员函数时，传入了调用对象total的地址。
+
+对任何类成员的直接访问都被看作this的隐式引用，当isbn使用bookNo时，它隐式地使用this指向的对象，于是成员函数的定义可以写成：
+
+`std::string isbn() const {return this->bookNo;}`
+
+因为this的目的总是指向调用成员函数的“这个”对象，所以它是一个常量指针，不允许改变this中保存的地址。
+
+
+
+【==**引入const成员函数**==】
+
+isbn函数后的const作用是修饰this指针的类型。
+
+默认情况下，this的类型是指向类类型非常量版本的常量指针。
 
 
 
