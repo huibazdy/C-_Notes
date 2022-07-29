@@ -222,7 +222,7 @@ struct Sales_data
 * 将两个对象相加生成一个新的对象：`+`
 * 将一个对象加到另一个对象上：`+=`
 
-暂时不考虑自定义运算符（即：运算符重载），考虑以函数形式来实现这些操作：
+暂时不考虑自定义运算符（即：运算符重载），以函数形式来实现这些操作：
 
 * 获取ISBN号：`isbn()`
 * 从istream读入数据到Sales_data对象中：`read()`
@@ -250,8 +250,30 @@ if(read(cin,total)){           //读入第一本书
     }
     print(cout,total)<<endl;
 }
-else
+else{
     cerr<<"No data?!"<<endl;   //没有任何输入信息的时候，通知用户
+}
+```
+
+
+
+开始改造Sales_data类（开始实现接口或者操作）
+
+```C++
+struct Sales_data{
+    //数据成员没变
+    std::string bookNo;
+    unsigned units_sold = 0;
+    double revenue = 0.0;
+    //接口添加
+    std::string isbn() const {return bookNo;}
+    Sales_data& combine(const Sales_data&);
+    double avg_price() const;
+};
+//非成员接口函数
+Sales_data add(const Sales_data&,const Sales_data&);
+std::istream &read(std::istream&,Sales_data&);
+std::ostream &print(std::ostream&,const Sales_data&);
 ```
 
 
@@ -261,10 +283,6 @@ else
 
 
 
-
-
-
-【从书店程序开始】
 
 
 
