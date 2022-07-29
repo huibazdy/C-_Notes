@@ -116,28 +116,71 @@ public:
 
 
 
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Sales_data类
 
-Sale_data.h
-
-> Sales_data类第一版
+> **最初的Sales_data类**
 
 
 
 ```C++
 //此时只有数据成员，类定义存在于头文件"Sales_data.h"
 struct Sales_data{
+    std::string bookNo;       //某本书ISBN编号
+    unsigned units_sold = 0;  //某本书销量
+    double revenue = 0.0;     //某本书的总销售额
+};
+```
+
+【==**头文件保护符**==】
+
+C++程序会用到一种预处理功能是头文件保护符（header guard），它是一种**特殊的预处理变量**，用来防止头文件被重复包含。
+
+【==**预处理变量**==】
+
+`#define`指令把一个名字设定为**预处理变量**。预处理变量有两种状态：**已知**和**未定义**。`#ifdef`指令判断预处理变量是否已经定义，当且仅当预处理变量已定义时为真；`#ifndef`指令判断预处理变量是否未定义，当且仅当预处理变量未定义时为真。一旦检查结果为真，则执行后续操作直至遇到`#endif`指令为止。
+
+使用这些功能就能有效**防止头文件重复包含**的发生。
+
+```C++
+/***头文件："Sales_data.h"***/
+#ifndef SALES_DATA_H    //检查预处理变量SALES_DATA_H是否未被定义，当且仅当未被定义才执行后续指令
+#define SALES_DATA_H    //指定SALES_DATA_H为头文件保护符
+#include<string>
+struct Saless_data{
     std::string bookNo;
     unsigned units_sold = 0;
     double revenue = 0.0;
 };
+#endif //执行到此处，预处理变量SALES_DATA_H将变为已定义，该头文件才会被拷贝到程序中去
+       //后续若再次包含头文件Sales_data.h，则#ifndef检查结果为假，编译器将忽略#ifndef到#endif之间内容
 ```
 
+【==**注意事项**==】
 
+整个程序中的预处理变量（包括头文件保护符）必须唯一，通常做法是基于头文件中**类的名字来构建保护符**的名字。同时，为避免与程序中其他实体重名，一般将**预处理变量全部大写**。
 
 ```C++
+/***官方头文件***/
 #ifndef SALES_DATA_H
 #define SALES_DATA_H
 
@@ -159,24 +202,26 @@ struct Sales_data
 #endif
 ```
 
-【头文件保护符】
-
-C++程序会用到一种预处理功能是头文件保护符（header guard），它依赖于预处理变量。
-
-【预处理变量】
-
-`#define`指令把一个名字设定为预处理变量。预处理变量有两种状态：**已知**和**未定义**。`#ifdef`指令判断预处理变量是否已经定义，当且仅当预处理变量已定义时为真；`#ifndef`指令判断预处理变量是否未定义，当且仅当预处理变量未定义时为真。一旦检查结果为真，则执行后续操作直至遇到`#endif`指令为止。
 
 
 
-> Sales_data类四个不同的构造函数
+
+
+
+> **改进的Sales_data类**
+
+
+
+【从书店程序开始】
+
+
 
 
 
 ```C++
 struct Sales_data
 {
-    //新增的构造函数
+    //新增四个构造函数
     Sales_data() = default;
     Sales_data(const std::string &s):bookNo(s){}
     Sales_data(const std::string &s,unsigned n,double p)
