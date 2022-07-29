@@ -14,8 +14,6 @@ Sales_item有一个名为isbn的成员函数，且支持+、=、+=、<<、>>运�
 * **加法**运算符（+）：将两个Sales_item对象相加，但两个对象必须有相同的ISBN号。加法结果是一个新的Sales_item对象
 * **复合赋值**运算符（+=）：将一个Sales_item对象加到另一个对象上
 
-
-
 从标准输入读入一个Sales_item对象：
 
 ```C++
@@ -129,6 +127,17 @@ Sale_data.h
 
 
 ```C++
+//此时只有数据成员，类定义存在于头文件"Sales_data.h"
+struct Sales_data{
+    std::string bookNo;
+    unsigned units_sold = 0;
+    double revenue = 0.0;
+};
+```
+
+
+
+```C++
 #ifndef SALES_DATA_H
 #define SALES_DATA_H
 
@@ -149,6 +158,14 @@ struct Sales_data
 };
 #endif
 ```
+
+【头文件保护符】
+
+C++程序会用到一种预处理功能是头文件保护符（header guard），它依赖于预处理变量。
+
+【预处理变量】
+
+`#define`指令把一个名字设定为预处理变量。预处理变量有两种状态：**已知**和**未定义**。`#ifdef`指令判断预处理变量是否已经定义，当且仅当预处理变量已定义时为真；`#ifndef`指令判断预处理变量是否未定义，当且仅当预处理变量未定义时为真。一旦检查结果为真，则执行后续操作直至遇到`#endif`指令为止。
 
 
 
