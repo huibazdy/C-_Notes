@@ -206,9 +206,7 @@ struct Sales_data
 
 
 
-
-
-> **改进的Sales_data类**
+> **改进Sales_data类**
 
 不同于Sales_item类（可以通过其接口来使用其对象，且不能访问其数据成员），Sales_data不是抽象数据类型（它允许用户直接访问其数据成员，并且要求用户来编写操作）。
 
@@ -308,7 +306,13 @@ std::ostream &print(std::ostream&,const Sales_data&);
 
 isbn函数后的const作用是修饰this指针的类型。
 
-默认情况下，this的类型是指向类类型非常量版本的常量指针。
+默认情况下，this的类型是指向类类型非常量版本的常量指针。可以理解为：`Sales_data *const`类型。尽管this是隐式的，但仍需遵循初始化规则。
+
+把this声明为`const Sales_data *const`（即指向常量的指针）有助于提高函数的灵活性。
+
+然而，this是隐式的，且不会出现在参数列表中，所以如何this声明为指向常量的指针？
+
+C++提供的做法是将<u>const关键字放在成员函数的参数列表</u>之后，表示<u>this是一个指向常量的指针</u>，像这样使用const的成员函数称为**常量成员函数**。
 
 
 
