@@ -284,7 +284,7 @@ std::ostream &print(std::ostream&,const Sales_data&);
 
 观察isbn函数的实现发现函数体内只有一条return语句，用来返回Sales_data对象的bookNo数据成员。实质上是`total.isbn()`语句隐式地返回**total.bookNo**。
 
-成员函数通过一个名为this的额外隐式参数来访问调用它的那个对象。
+**成员函数通过一个名为this的额外隐式参数来访问调用它的那个对象**。
 
 当我们调用一个成员函数时，用请求该函数的对象地址初始化this。
 
@@ -298,7 +298,7 @@ std::ostream &print(std::ostream&,const Sales_data&);
 
 `std::string isbn() const {return this->bookNo;}`
 
-因为this的目的总是指向调用成员函数的“这个”对象，所以它是一个常量指针，不允许改变this中保存的地址。
+因为this总是指向调用成员函数的“这个”对象，所以它是一个**常量指针**，不允许改变this中保存的地址。
 
 
 
@@ -313,6 +313,25 @@ isbn函数后的const作用是修饰this指针的类型。
 然而，this是隐式的，且不会出现在参数列表中，所以如何this声明为指向常量的指针？
 
 C++提供的做法是将<u>const关键字放在成员函数的参数列表</u>之后，表示<u>this是一个指向常量的指针</u>，像这样使用const的成员函数称为**常量成员函数**。
+
+
+
+【==**返回this对象的函数**==】
+
+成员函数`combine`的设计初衷是实现复合运算符`+=`。调用该函数的对象位于运算符左侧，运算符右侧对象则为函数显式的实参。
+
+```c++
+Sales_data& Sales_data::combine(const Sales_data &rhs)
+{
+    units_sold += rhs.units_sold;
+    revenue += rhs.revenue;
+    return *this;    //返回调用函数的对象
+}
+```
+
+
+
+
 
 
 
