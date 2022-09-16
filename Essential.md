@@ -39,6 +39,56 @@ class Stack
 };
 ```
 
+栈的元素填充：
+
+```C++
+void fill_stack(Stack &stack,istream &is = cin)
+{
+    string str;
+    while(is >> str && !stack.full())
+        stack.push(str);
+    cout<<"Read in"<<stack.size()<<"elements\n";
+}
+```
+
+成员函数的实现：
+
+```C++
+inline bool Stack::empty()
+{
+    return _stack.empty();
+}
+
+inline bool Stack::full()
+{
+    return _stack.size() == _stack.max_size();
+}
+
+bool Stack::pop(string &elem)
+{
+    if(empty())
+        return false;
+    elem = _stack.back();
+    return true;
+}
+
+bool Stack::peek(string &elem)
+{
+    if(empty())
+        return false;
+    elem = _stack.back();
+    return true;
+}
+
+bool Stack::push(const string &elem)
+{
+    if(full())
+        return false;
+    _stack.push_back(elem);
+    ret
+}
+```
+
 
 
 
