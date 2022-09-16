@@ -129,7 +129,7 @@ class Triangular  //Triangular数列类
 
 我们需要考虑 如何初始化，因为编译器不会自动处理。因此我们需要编写用于初始化数据成员的***构造函数***。
 
-构造函数需要遵循以下法则：
+构造函数需要遵循以下语法规则：
 
 * 无返回值
 * 无返回类型
@@ -148,6 +148,79 @@ class Triangular
 ```
 
 类的对象被定义后，***编译器会自动根据获得的参数挑选出应该被调用的构造函数***。
+
+```C++
+Triangular t1;          //调用默认构造函数
+Triangular t2(10,3);    //调用第三种构造函数
+Triangular t3 = 8;      //调用单一参数的第二种构造函数
+
+Triangular t4();        //此行将t4定义为一个函数，返回对象，无法定义对象
+```
+
+默认构造函数除恶了不接受任何参数的情况，还有一种情况是提供了默认值：
+
+```C++
+class Triangular
+{
+    public:
+        Triangular(int len = 1,int beginPos = 1);  //这种情况更常见
+    ...
+};
+```
+
+
+
+【**成员初始化列表**】
+
+除了默认构造函数和带参数的构造函数外，还有一种构造函数语法是***成员初始化列表***（***member initialization list***）：
+
+```C++
+Triangular::Triangular(const Triangular &rhs):
+                      _length(rhs._length),_beginPos(rhs._beginPos),_next(rhs._next){}
+```
+
+**成员初始化列表就是在构造函数参数列表冒号后面，一个以逗号分隔的列表**。
+
+
+
+【**构造函数小结**】
+
+```mermaid
+flowchart LR
+    A([对象初始化需求]) --> B(构造函数)
+    B --> C[默认构造函数]
+    B --> D[带参数构造函数]
+    B --> E[成员列表初始化]
+    C --> F[1.不接受任何参数]
+    C --> G[2.接受参数但提供默认值]
+```
+
+
+
+【**析构函数**】
+
+析构函数的作用是在对象生命周期结束后，自动调用析构函数**“善后”**。主要工作是：**释放**在构造函数中或对象生命周期中分配的**资源**。
+
+析构函数语法规则：
+
+* 无返回值、无参数
+* class名称前加`~`
+* 不能被重载
+
+```C++
+class Matrix
+{
+    public:
+        Matrix(int row,int col):_row(row),clo(cow){_pmat = new double[row * col];}
+        ~Matrix(){delete [] _pmat;}
+    private:
+        int _row;
+        int _col;
+        double* _pmat;
+};
+```
+
+我们通过Matrix本身的构造函数和析构函数，完成了***heap内存***的自动管理。
 
 
 
