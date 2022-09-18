@@ -331,7 +331,7 @@ Triangular& Trangular::copy(const Triangular &rhs)
     _beginPos = rhs._beginPos;
     _nest = rhs._beginPos -1;
     
-    return ???
+    return ???   //需要一种指向t1整个对象的方法
 }
 ```
 
