@@ -322,7 +322,7 @@ Triangular t2(3,4);
 t1.copy(t2);   //调用copy，拷贝t2至t1
 ```
 
-
+成员函数的实现如下：
 
 ```C++
 Triangular& Trangular::copy(const Triangular &rhs)
@@ -331,11 +331,48 @@ Triangular& Trangular::copy(const Triangular &rhs)
     _beginPos = rhs._beginPos;
     _nest = rhs._beginPos -1;
     
-    return ???   //需要一种指向t1整个对象的方法
+    return ???   //需要一种指向t1整个对象的方法，this指针来扮演这个角色
+    //return *this
+}
+```
+
+> ***This指针***在**成员函数内**用来指向调用者（一个对象）。
+
+
+
+this的工作过程：
+
+编译器将this指针加到每个成员函数的参数列表，例如`copy()`函数：
+
+```c++
+Triangular& Triangular::copy(Triangular *this,const Triangular &rhs)
+{
+    this -> _length = rhs._length;
+    this -> _beginPos = rhs._beginPos;
+    this -> _next = rhs._beginPos - 1;
+}
+```
+
+想用一个对象复制出另一个对象前，先确定两个对象是否相同：
+
+```C++
+Triangular& Triangular::copy(const Triangular &rhs)
+{
+    if(this != &rhs)
+    {
+        _length = rhs._length;
+        _beginPos = rhs._beginPos;
+        _nest = rhs._beginPos -1;
+    }
+    return *this;
 }
 ```
 
 
+
+【**static类成员**】
+
+静态数据成员（static data member）用来表示**唯一的**、**可共享的**数据成员，它**可以被同一个类的所有对象访问**。
 
 
 
