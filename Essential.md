@@ -336,7 +336,7 @@ Triangular& Trangular::copy(const Triangular &rhs)
 }
 ```
 
-> ***This指针***在**成员函数内**用来指向调用者（一个对象）。
+> ***This指针***在**成员函数内**用来指向调用者（一个对象）。**this指针是成员函数的一个参数**。在对象调用某个成员函数时，这个this指针就绑定到这个对象上。
 
 
 
@@ -370,9 +370,18 @@ Triangular& Triangular::copy(const Triangular &rhs)
 
 
 
-【**static类成员**】
+【**static数据成员**】
 
 静态数据成员（static data member）用来表示**唯一的**、**可共享的**数据成员，它**可以被同一个类的所有对象访问**。
+
+* 对于一个类来说，static data member只有唯一实体（类似全局变量）
+* 其名称必须带上类作用域运算符`::`
+
+
+
+【**static成员函数**】
+
+
 
 
 
