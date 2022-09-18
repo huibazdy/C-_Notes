@@ -308,7 +308,32 @@ class Triangular
 };
 ```
 
+利用关键字`mutable`标记数据成员（***可变数据成员***），可以让编译器知道给变该数据成员不会破坏对象的常量性。
 
+
+
+【**This指针**】
+
+ 为`Triangular`类设计一个成员函数`copy()`，使该类的对象可以作为另一个对象的初值。
+
+```C++
+Triangular t1(8);
+Triangular t2(3,4);
+t1.copy(t2);   //调用copy，拷贝t2至t1
+```
+
+
+
+```C++
+Triangular& Trangular::copy(const Triangular &rhs)
+{
+    _length = rhs._length;
+    _beginPos = rhs._beginPos;
+    _nest = rhs._beginPos -1;
+    
+    return ???
+}
+```
 
 
 
