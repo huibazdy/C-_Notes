@@ -259,9 +259,58 @@ Matrix mat2 = mat1;
 
 Matrix类的设计者提供一个拷贝构造函数来改变成员逐一初始化模式：
 
-`Matrix::Matrix(const Matrix &rhs);`
+`Matrix::Matrix(const Matrix &rhs){};`
 
 拷贝构造函数唯一参数是一个**常量引用**（const reference），指向一个Matrix对象。
+
+
+
+函数体的实现是为了拜托对之前内存空间的依赖，所以可以考虑产生一个***独立***的数组（内存空间）副本，这样***某个对象的析构就不会影响到另一个对象***。
+
+```C++
+Matrix::Matrix(const Matrix &rhs):_row(rhs._row),_col(rhs.col)
+{
+    int elemNum = _row * _col;
+    _pmat = new double[elemNum];
+    //产生副本
+    for(int i = 0;i < elemNum;i++)
+    {
+        _pmat[i] = rhs._pmat[i];
+    }
+}
+```
+
+> 在我们设计类时，需要问问自己，在此class之上使用成员逐一初始化是否合适；如果合适就不需要提供额外的拷贝构造函数，否则我们就要编写拷贝构造函数且在其中编写正确的初始化操作。
+
+
+
+【**可变（mutable）和不可变（const）**】
+
+有时候class设计者需要告诉编译器，某些成员函数不会改变对象的数据成员。
+
+```C++
+class Triangular
+{
+    public:
+        //const member function
+        int length()       const {return _length;}
+        int beginPos()     const {return _beginPos;}
+        int elem(int pos)  const;
+        //non-const member function
+        bool next(int &val);
+        void next_reset() {_next = _beginPos - 1;}
+    private:
+        int _length;
+        int _beginPos;
+        int _next;
+        //static data member
+        static vector<int> _elems;
+};
+```
+
+
+
+
 
 
 
