@@ -59,7 +59,36 @@ double print_total(ostream &os,const Quote &item,size_t n)
       <<"#sold: "<<n<<" total due: "<<ret<<endl;
     return ret;
 }
+
+Quote basic;         //basic是Quote类型
+Bulk_quote bulk;     //bulk是Bulk_quote类型
+
+print_total(cout,basic,20);   //当print_total执行调用net_price时，用的是Quote版本net_price
+print_total(cout,bulk,20);    //当print_total执行调用net_price时，用的是Bulk_quote版本net_price
 ```
 
+上述函数运行过程中的运行版本由传入的实参类型决定，即***运行时***选择函数版本，所以动态绑定也称运行时绑定。
 
+> ***C++中，当使用引用（或指针）来调用基类的虚函数时，会发生动态绑定***
+
+
+
+## 定义基类和派生类
+
+```C++
+class Quote
+{
+public:
+    Quote() = default;
+    Quote(const std::string &book,double sales_price):
+                     bookNo(book),price(sales_price){}
+    std::string isbn() const {return bookNo;}
+    virtual double net_price(std::size_t n) const {return n * price;}
+    virtual ~Quote() = default;    //对析构函数进行动态绑定
+private:
+    std::string bookNo;
+protected:
+    double
+};
+```
 
