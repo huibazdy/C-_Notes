@@ -8,7 +8,9 @@
 
 
 
-如果带指针的类，使用编译器自带的拷贝构造或拷贝赋值，只是拷贝了指针，只是指向同一个地方，并不是拷贝了原对象指向的数据。所以需要自定义拷贝构造和拷贝赋值函数。
+如果**带指针**的类，使用编译器自带的拷贝构造或拷贝赋值，只是拷贝了指针，只是指向同一个地方。所以**必须**要自定义**拷贝构造函数**和**拷贝赋值运算符**。否则一方面会造成内存泄漏，另一方面，两个指针同时指向一个数据，修改会互相影响，数据不安全。这种拷贝叫做**浅拷贝**。编译器默认执行浅拷贝。
+
+**深拷贝**是先根据被拷贝的对象数据成员大小分配空间，再进行数据复制。
 
 
 
@@ -17,7 +19,7 @@
 ```c++
 int main()
 {
-    String s1();           //默认构造
+    String s1();           //普通构造函数
     String s2("hello");    //普通构造
     String s3(s1);         //拷贝构造
     cout<<s3<<endl;        //重载 <<
@@ -62,16 +64,41 @@ private:
 【类实现】
 
 ```c++
-inline String::String(const char* cstr)
+inline String::String(const char* cstr)   //普通构造函数的实现
 {
-    if(cstr){   //指针非空
-        m_string = new char[strlen(cstr) + 1];  //为数据成员分配空间
+    if(cstr){   //传进来的指针非空
+        m_string = new char[strlen(cstr.m_string) + 1];  //为数据成员分配空间
         strcpy(m_string,cstr);      //将参数字符串复制到数据成员字符串
     }
-    else{       //指针为空，未指定初值
-        m_string = new char[1];
-        *m_string = `\0`
+    else{       //传进来的指针为空，即未指定初值
+        m_string = new char[1];     //分配一个字节空间
+        *m_string = `\0`;           //存储一个字符串结束符
     }
+}
+
+inline String::~String()
+{
+    delete[] m_string;
 }
 ```
 
+
+
+类中有指针数据成员，需要在构造函数中使用 **new** 动态分配，同时在析构函数中使用 **delete** 释放动态分配的内存。
+
+
+
+> new 创建类对象
+
+```c++
+{
+    ...
+    String s1();
+    String s2("hello");
+    String* p = new String("hello");
+    delete p;
+    ...
+}
+```
+
+在离开作用域时，s1、s2 都会调用析构函数释放内存空间。
