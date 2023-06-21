@@ -76,10 +76,14 @@ inline String::String(const char* cstr)   //普通构造函数的实现
     }
 }
 
+//拷贝赋值运算符
+
 inline String::~String()
 {
     delete[] m_string;
 }
+
+
 ```
 
 
@@ -102,3 +106,42 @@ inline String::~String()
 ```
 
 在离开作用域时，s1、s2 都会调用析构函数释放内存空间。
+
+
+
+
+
+> 拷贝赋值
+
+拷贝赋值运算符`=`两边是两个对象，实际赋值的步骤应该如下：
+
+1. 将左边对象清空
+2. 创建出于右边对象相等大小的空间
+3. 赋值
+
+使用：
+
+```c++
+s2 = s1;
+```
+
+定义：
+
+```c++
+inline String& String::operator=(const String& str)
+{
+    if(this == &str)    //检查是否是自我赋值，自己赋值给自己，两个指针是否指的是同一个东西
+        return *this;
+    
+    delete[] m_string;
+    m_string = new char[strlen(str.m_string)+1];  //加 1 的原因是 strlen() 结果不包括结束符
+    strcpy(m_string,str.m_string);
+    
+    return *this;
+}
+```
+
+进行自我赋值检查的原因有两个：
+
+1. 提高效率，，减少不必要操作；
+2. 防止出错，如果是自我赋值，下面三个步骤是走不通的
