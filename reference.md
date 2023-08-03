@@ -69,15 +69,49 @@
 
 
 
-> 引用的常见用法
+> **引用的常见用法**
 
-一般用在参数处理上：
+### 一、作为函数参数
 
-函数传参一般用reference
+【**例**】
+
+以下三种参数传递方式都是传递 `Cls`类的对象到不同函数，函数体都是对类的成员函数`m_fun()`调用：
 
 ```c++
-void func1(Cls*)
+// 传递对象的指针
+void func1(Cls* ptr_obj) {ptr_obj->m_func();}
+// 传递对象本身
+void func2(Cls obj) {obj.m_func();}
+// 传递对象的引用
+void fun3(Cls& obj) {obj.m_func();}
 ```
+
+对三种不同传参形式函数的调用如下：
+
+```c++
+func1(&obj1);  //传指针
+func2(obj2);   //传值
+func3(obj3);   //传引用
+```
+
+【<span style="color:red">**注**</span>】
+
+从上面可以看出，在函数声明时不能存在同名函数的传值和传引用两种形式，否则在调用时编译器不知道该调用哪个函数，会造成歧义（**Ambiguity**）。例如：
+
+```c++
+double imag(const double im) {...}
+double imag(const double& im) {...}
+```
+
+对两个函数的调用形式都是：
+
+```c++
+imag(im);
+```
+
+
+
+### 二、作为函数返回类型
 
 
 
