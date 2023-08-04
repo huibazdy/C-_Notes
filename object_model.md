@@ -32,10 +32,38 @@ Derived::~Derived(...) {...~Base()};
 
 ## 复合（composition）
 
-> 构造顺序
+> **构造顺序**
+
+`Container` 的构造函数先调用 `Component` 的默认构造函数，再执行自己的部分
+
+```c++
+Container::Container():Component() {...};
+```
 
 
 
+> **析构顺序**
+
+`Container` 的析构函数先执行自己的析构部分，最后再调用`Component` 的析构函数
+
+```c++
+Container::~Container() {...~Component()};
+```
 
 
-> 析构顺序
+
+## 继承+复合
+
+> **构造顺序**
+
+```c++
+Derived::~Derived():Base(),Component() {...};
+```
+
+
+
+> **析构顺序**
+
+```c++
+Derived::~Derived() {...~Component(),~Base()};
+```
