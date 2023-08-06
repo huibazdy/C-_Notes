@@ -33,6 +33,15 @@
 * **B 的派生类 C**
 
     ```c++
+    class C:public B
+    {
+    public:
+        virtual void vfunc1();
+        void func2();
+    private:
+        int m_data1;
+        i
+    };
     ```
 
     
