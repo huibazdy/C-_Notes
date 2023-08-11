@@ -63,7 +63,9 @@ s.erase(3);                    // {0,1,2,5}
 
 ```c++
 auto i = s.find(1);
-if(i == s.end())
-    s.erase(i);    //todo：如何利用迭代器删除元素？？
+if(i != s.end())
+    s.erase(*i);               // {0,2,5}
+else
+    cout<<"Cannot find the target"<<endl
 ```
 
