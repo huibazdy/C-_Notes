@@ -17,7 +17,9 @@ set 可以从两个维度来进行分类：
 
 
 
-使用 set
+## 使用 set
+
+### 创建 set
 
 ```c++
 #include <set>
@@ -33,3 +35,35 @@ std::set<string> animals = {"tiger","snake","sheep",
 std::set<string> pets(animals);
 ...
 ```
+
+
+
+### 常见操作
+
+> **添加元素：`insert()`**
+
+```c++
+#include <set>
+std::set<int> val = {3,0,1};   // 打印会自动排序为：{0,1,3}
+s.insert(2);                   // {0,1,2,3}
+s.insert(5);                   // {0,1,2,3,5}
+```
+
+
+
+> **删除元素：`erase()`**
+
+```c++
+s.erase(3);                    // {0,1,2,5}
+```
+
+
+
+> **查找元素：`find()`**
+
+```c++
+auto i = s.find(1);
+if(i == s.end())
+    s.erase(i);    //todo：如何利用迭代器删除元素？？
+```
+
