@@ -64,3 +64,23 @@
 * **`weak_ptr`**
 
     一种伴随类，是一种弱引用，指向 **shared_ptr** 所管理的对象
+
+
+
+这三个模板类都定义在 `<memory>` 头文件中。
+
+
+
+最安全的使用动态内存的方法是调用一个库函数 **make_shared** 来返回一个对象的 **shared_ptr** 。
+
+* **`make_shared()`**
+
+    用法如下：
+
+    ```c++
+    shared_ptr<int> p1 = make_shared<int>(10);
+    shared_ptr<string> p2 = make_shared<string>(5,'9');  // p2 指向 "99999"
+    auto p3 = make_shared<vector<int>>();      // 推荐使用自动推导类型
+    ```
+
+    
