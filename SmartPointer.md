@@ -83,4 +83,16 @@
     auto p3 = make_shared<vector<int>>();      // 推荐使用自动推导类型
     ```
 
-    
+
+
+> 怎样实现自动释放动态对象？
+
+借助的是一个 shared_ptr 自带的**引用计数**器。
+
+无论何时，拷贝一个 shared_ptr 都会使计数器递增，这种拷贝涉及到以下几种情况：
+
+1. 用一个 shared_ptr 初始化另一个 shared_ptr；
+2. 将一个 shared_ptr 作为参数传递给函数；
+3. shared_ptr 作为函数的返回值；
+
+当 shared_prt 被赋予新的值或被销毁（局部的shared_ptr离开作用域），计数器就会递减。一旦计数器减少到 0 ，它就会自动释放自己管理的对象。
