@@ -115,3 +115,15 @@ protected:
 
 
 > **派生类能访问共有成员，不能访问私有成员。**
+
+
+
+```C++
+class DiscountedBook : public OriginalPriceBook
+{
+public:
+    DiscountBook() = default;
+    DiscountBook(const std::string &isbn, double price, std::size_t n, ):
+};
+```
+
