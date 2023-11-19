@@ -123,7 +123,13 @@ class DiscountedBook : public OriginalPriceBook
 {
 public:
     DiscountBook() = default;
-    DiscountBook(const std::string &isbn, double price, std::size_t n, ):
+    DiscountBook(const std::string &isbn, double price, std::size_t n, double discount);
+private:
+    std::size_t minQuantity;    // 能打折的最低购买数量
+    double discount;            // 达到打折数量后的折扣信息
 };
 ```
 
+
+
+> **派生列表中的说明符的作用是控制派生类从基类继承的成员对派生类用户是否可见**
