@@ -208,7 +208,32 @@ private:
 
 我们不希望用户创建一个 DiscountInfo 对象，因为单独存在的这个对象没有意义。因为它表示打折的通用概念（购买量以及折扣信息）。
 
-解决方式：将 `totalCost()` 定义为纯虚函数（pure virtual），借此告诉用户该函数没有实际意义，且纯虚函数无须定义。具体做法是：在函数体的位置写 `= 0` 即可。
+解决方式：将 `totalCost()` 定义为纯虚函数（pure virtual），借此告诉用户该函数没有实际意义，且纯虚函数无须定义（如果要定义，在类外定义）。具体做法是：在函数体的位置写 `= 0` 即可。
+
+至此，该类的 `totalCost()` 函数有两点需要注意：
+
+1. 继承自基类；
+2. 纯虚函数；
+
+```c++
+class DiscountInfo : public BookBase {
+public:
+    DiscountInfo() = default;
+    DiscountInfo(const std::string& book, double price, std::size_t qty, double disc):
+    			BookBase(book,price),  // 将前两个构造函数参数传递给 BookBase 基类的构造函数
+    			quantity(qty),discount(disc) {}
+    double totalCost(std::size_t) const = 0;
+protected:
+    std::size_t quantity;       // 折扣购买量
+    double discount;            // 折扣
+};
+```
+
+
+
+> **含有纯虚函数的类是抽象基类**
+
+抽象基类负责定义接口，后续其他类可以覆盖该接口
 
 
 
