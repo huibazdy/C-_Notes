@@ -134,3 +134,50 @@ private:
 
 > **派生列表中的说明符的作用是控制派生类从基类继承的成员对派生类用户是否可见**
 
+
+
+
+
+## 虚函数
+
+
+
+1. 派生类中函数***覆盖***某个基类中的虚函数时，virtual 关键字可省略；
+2. 派生类中函数若覆盖某个集成来的虚函数，它的形参类型必须与被它覆盖的基类函数完全一致；
+    1. 派生类中若定义了一个与基类虚函数同名但形参列表不同，也是合法的，编译器认定这是一个与基类函数完全独立的函数。这时，派生类函数***没有覆盖***掉基类中的版本。但是实际情况是，如果意图覆盖，却因为写错，写成了没有覆盖的情况，此时编译器是检查不出来的（所以调试这样的问题非常困难）。所以 C++11 标准中，意图覆盖虚函数的写法后面需要加上 `override` 关键来帮助编译器检查上述错误（此时编译器将报错）。
+
+
+
+```c++
+class A {
+public:
+    virtual void func1(int) const;
+    virtual void func2();
+};
+
+class B : public A {
+public: 
+    void func1(int) const override;   // 正确，与基类形参列表匹配
+    void func2(int) override;         // 错误，A 中没有形如 func2(int) 的函数，无法覆盖
+};
+```
+
+
+
+关键字 `final` 可以避免某个函数之后被覆盖，否则会引发错误，例如：
+
+```c++
+class B : public A {
+public:
+    void func1(int) const final;     // 不允许后续其他类进行覆盖 func1(int)
+    virtual void func2() override;
+};
+
+class C : public B {
+public:
+    void func1(int) const;          // 错误， B 已经将 func1 声明为 final 无法覆盖
+    void func2();                   // 正确，覆盖从间接基类 B 继承来的 func2   
+};
+```
+
+第 9 行中因为形参列表一致，所以解析为意图覆盖，所以会报错。
