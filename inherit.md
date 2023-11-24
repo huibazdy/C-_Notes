@@ -241,14 +241,38 @@ protected:
 
 ```c++
 class Strategy1 {
-    
+    ...
 };
 
 class Strategy2 {
-    
+    ...
 };
 
 class Strategy3 {
-    
+    ...
 };
 ```
+
+
+
+先来实现第一种类，也就是***重写***最初定义的派生类：
+
+```c++
+class Strategy1 : public DiscountInfo {
+public:
+    Strategy1() = default;
+    Strategy1(const std::string& book, double price, std::size_t qty, double disc):
+    		Discount(book,price,qty,disc) {}
+    double totalCost(std::size_t qty) const override;
+};
+```
+
+直接基类是 `DiscountInfo` 这个抽象类，间接基类是 `BookBase` 。
+
+
+
+> **关于构造函数的调用顺序**
+
+
+
+`Strategy1` 类没有自己的数据成员，它的构造函数将实参传递给它的直接基类 DiscountInfo ，之后 DiscountInfo 的构造函数继续调用它的直接基类 BookBase 的构造函数来初始化 booNo 以及 price 成员，当这个构造函数结束后就开始运行 DiscountInfo 的构造函数并初始化 quantity 和 discount 成员，最后运行 Strategy1 的构造函数（还函数无须执行实际的初始化或其他工作）。
