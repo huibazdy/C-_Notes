@@ -276,3 +276,33 @@ public:
 
 
 `Strategy1` 类没有自己的数据成员，它的构造函数将实参传递给它的直接基类 DiscountInfo ，之后 DiscountInfo 的构造函数继续调用它的直接基类 BookBase 的构造函数来初始化 booNo 以及 price 成员，当这个构造函数结束后就开始运行 DiscountInfo 的构造函数并初始化 quantity 和 discount 成员，最后运行 Strategy1 的构造函数（还函数无须执行实际的初始化或其他工作）。
+
+
+
+> **关于 `protected`**
+
+
+
+* 类的用户不可访问
+* 对于派生类的成员与友元可以访问
+* 派生类的成员或友元只能通过派生类对象访问基类的 `protected` 成员
+
+关于第三条规则，示例如下：
+
+```c++
+class Base {
+	...
+protected:
+    int n;
+	...
+};
+
+class Derived : public Base {
+    friend void f1(Derived&);    // 通过派生类对象，可以访问基类成员 Derived::n
+    friend void f2(Base&);       // 通过基类对象，不能访问基类成员 Base::n
+    int m;
+};
+
+void f1(Derived &s) {s.m = s.n = 0;}  //正确，f1 可以访问 protected 成员
+void f2(Base &r) {r.n = 0;}         //错误，f2 不能访问基类protected成员
+```
