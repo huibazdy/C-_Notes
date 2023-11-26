@@ -64,7 +64,7 @@ printTotalCost(cout,bulk,20);   // 调用 DiscountedBook::sales_price()
 
 在程序运行时，根据函数实参类型选择函数版本，因此动态绑定又称**运行时绑定（Run-time Binding）**。
 
-> 在 C++ 中，当且仅当使用***引用***或***指针***调用一个虚函数时将发生动态绑定。
+> 在 C++ 中，当且仅当使用基类的***引用***或***指针***调用一个虚函数时将发生动态绑定。
 
 
 
@@ -304,5 +304,5 @@ class Derived : public Base {
 };
 
 void f1(Derived &s) {s.m = s.n = 0;}  //正确，f1 可以访问 protected 成员
-void f2(Base &r) {r.n = 0;}         //错误，f2 不能访问基类protected成员
+void f2(Base &r) {r.n = 0;}           //错误，f2 不能访问基类protected成员
 ```
