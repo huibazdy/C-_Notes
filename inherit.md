@@ -306,3 +306,39 @@ class Derived : public Base {
 void f1(Derived &s) {s.m = s.n = 0;}  //正确，f1 可以访问 protected 成员
 void f2(Base &r) {r.n = 0;}           //错误，f2 不能访问基类protected成员
 ```
+
+
+
+> **为什么要将基类的析构函数声明为虚函数？**
+
+
+
+设想这样一种情形：
+
+```c++
+class A {
+public:
+    ...
+    ~A() = default;
+};
+
+class B : public A {
+public:
+    ...
+    ~B() = default;
+};
+```
+
+如果将一个基类指针绑定到派生类上，再用 delete 来通过该指针来删除对象，此时执行的是哪个析构函数？答案是：会产生未定义行为。然而实际上，我们意图删除的是派生类 B 的对象。
+
+因为需要编译器清楚知道执行哪个析构函数，所以要将基类的析构函数声明为虚函数。
+
+```c++
+class A {
+public:
+    ...
+    virtual ~A() = default;
+};
+```
+
+这样就能保证在delete基类指针时运行正确的析构函数版本。
