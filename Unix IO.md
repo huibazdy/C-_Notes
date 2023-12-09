@@ -1,6 +1,6 @@
 # Unix I/O
 
-> 常见 Unix I/O
+> **常见 Unix I/O**
 
 * ***打开文件***
 
@@ -19,3 +19,86 @@
 * ***关闭文件***
 
     应用程序访问完文件后，通知内核关闭文件，内核的响应是释放打开文件时创建的数据结构，并将 fd 恢复到可用的 fd 池子中。
+
+
+
+## open( )
+
+
+
+```c
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int open(char* filename, int flags, mode_t mode);
+```
+
+
+
+open 函数的作用是将 **filename** 转换为一个文件描述符 **fd** 并返回。返回的 fd 总是在进程中没有被打开的 fd 的最小值。
+
+【**参数列表**】
+
+* **`flags`**
+
+    向内核指明进程如何访问这个文件，最常见的访问方式如下：
+
+    * **O_RDONLY**：只读
+    * **O_WRONLY**：只写
+    * **O_RDWR**：可读可写
+
+    除开这三种还有一些额外提示，此处暂不讨论。
+
+* **`mode`**
+
+    指定新文件的访问权限
+
+
+
+## close( )
+
+
+
+```c
+#include <unistd.h>
+
+int close(int fd);
+```
+
+
+
+关闭一个已关闭的 fd 会出错。
+
+
+
+## read( )
+
+```c
+#include <unistd.h>
+
+ssize_t read(int fd, void* buf, size_t n);
+```
+
+从当前文件 fd 的位置（内核有记录，即：k）复制 n 个字节的数据到内存的 buf 位置。
+
+正常情况下返回实际传送的字节数，但有两种异常返回情况：
+
+* 发生错误，返回 -1
+* 拷贝终止位置超出文件大小，则返回 0，代表 EOF 。
+
+> **为什么返回值是 ssize_t 类型？**
+>
+> 因为在 **x86-64** 系统中， **size_t** 被定义为 **unsigned long**（无符号），而 **ssize_t** 被定义为 **long**（有符号），因为有异常返回情况可能是 **-1** ，所以需要定义返回类型为有符号的 **ssize_t** 类型。
+
+## write( )
+
+```c
+#include <unistd.h>
+
+ssize_t write(int fd, const void* buf, size_t n);
+```
+
+从内存的 buf 位置拷贝 n 字节的数据到文件 fd 中去。
+
+通过 `lseek()`函数能显式地修改当前文件位置。
