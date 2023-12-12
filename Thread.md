@@ -96,5 +96,68 @@ int main()
 
 
 
+```c++
+#include <iostream>
+#include <thread>
+
+int hello() {
+    std::cout<<"Hello Concurrence World"<<std::endl;
+}
+
+int main()
+{
+    std::thread t1(hello);
+    t1.join();              // 该调用会令主线程等待子线程 t1
+    return 0;
+}
+```
+
+注意第 11 行，如果不加这一句，起始线程可能不等待新线程结束机会终止程序，更极端的情况是新线程还没启动就终止了程序。
 
 
+
+每个 C++ 程序至少会包含一个线程（起始线程），就是 main 函数（main函数返回时，程序退出）。之后可以创建其他线程，即以其它函数为入口（入口函数返回时，现成结束）。这些新线程与起始线程并发运行。
+
+
+
+## 启动线程
+
+> 通过构建`std::thread`对象，管控线程的启动过程
+
+最简单的任务就是运行一个一般的函数，复杂任务：例如函数对象，运行过程中经由某种系统消息协调，收到信号后才会停止。
+
+只要通过 C++ 标准库来启动线程，都需要构造 `std::thread`对象。
+
+```c++
+#include <iostream>
+#include <thread>
+
+void do_work();
+std::thread task1(do_work);
+```
+
+
+
+函数对象：
+
+```c++
+class CalcuSum {
+public:
+    double operator()(int a,int b,int c) const {
+        return (double)(a + b + c) / 3;
+    }
+};
+
+CalcuSum c;
+std::thread task1(c);
+```
+
+
+
+
+
+> 启动线程后是等待它结束（汇合）还是任由它独自运行（分离）？
+
+一个极端情况是：等到线程对象被销毁还没有指定，`std::thread`对象的析构函数会调用`std::terminate()`来终止整个程序。
+
+我们只需要在线程对象被销毁前做决定即可避免这种情况发生。
